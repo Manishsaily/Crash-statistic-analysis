@@ -101,21 +101,29 @@ def display_alcohol_impacts(filtered_data: pd.DataFrame, selected_year: int) -> 
         st.pyplot(fig)
 
 # Function to display accident data per speed zone
-def display_speed_zones(data: pd.DataFrame) -> None:
-    """Displays data on total accidents per speed zone."""
+def display_speed_zones(data: pd.DataFrame, selected_year: int) -> None:
+    """Displays data on total accidents per speed zone for the selected year."""
     if st.button("Show Data per Speed Zone"):
-        data['SPEED_ZONE'] = data['SPEED_ZONE'].str.extract('(\d+)').astype(float)
-        accident_counts = data['SPEED_ZONE'].value_counts().reset_index()
+        # Filter data by the selected year
+        filtered_data = data[data['ACCIDENT_DATE'].dt.year == selected_year].copy()
+        
+        # Extract numeric values from SPEED_ZONE
+        filtered_data['SPEED_ZONE'] = filtered_data['SPEED_ZONE'].str.extract('(\d+)').astype(float)
+
+        # Count accidents per speed zone
+        accident_counts = filtered_data['SPEED_ZONE'].value_counts().reset_index()
         accident_counts.columns = ['Speed Zone (Km/h)', 'Total Accidents']
 
-        st.write('Total Accidents per Speed Zone:')
+        # Display the total accidents per speed zone
+        st.write(f'Total Accidents per Speed Zone in {selected_year}:')
         st.dataframe(accident_counts)
 
+        # Create a bar chart of total accidents per speed zone
         fig, ax = plt.subplots()
         ax.bar(accident_counts['Speed Zone (Km/h)'], accident_counts['Total Accidents'], color='orange')
         ax.set_xlabel('Speed Zone (Km/h)')
         ax.set_ylabel('Total Accidents')
-        ax.set_title('Total Accidents per Speed Zone')
+        ax.set_title(f'Total Accidents per Speed Zone in {selected_year}')
         st.pyplot(fig)
 
 # Main execution to read and process data
