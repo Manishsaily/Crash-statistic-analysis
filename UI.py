@@ -13,7 +13,7 @@ def read_csv(csv: str) -> pd.DataFrame:
     try:
         data = pd.read_csv(csv)
         date_format = '%d/%m/%Y'
-        data['ACCIDENT_DATE'] = pd.to_datetime(data['ACCIDENT_DATE'], format=date_format, errors='coerce')
+        data['ACCIDENT_DATE'] = pd.to_datetime(data['ACCIDENT_DATE'], format=date_format)
         st.write('CSV file uploaded successfully!')
         return data
     except Exception as error_file:
@@ -60,7 +60,7 @@ def display_accidents_per_hour(filtered_data: pd.DataFrame, selected_year: int) 
     """Displays a bar chart of accidents per hour."""
     if st.button("Accidents per Hour"):
         time_format = '%H.%M.%S'
-        filtered_data['ACCIDENT_TIME'] = pd.to_datetime(filtered_data['ACCIDENT_TIME'], format=time_format, errors='coerce')
+        filtered_data['ACCIDENT_TIME'] = pd.to_datetime(filtered_data['ACCIDENT_TIME'], format=time_format)
         filtered_data['hour'] = filtered_data['ACCIDENT_TIME'].dt.hour
 
         # Group data by hour and count accidents
