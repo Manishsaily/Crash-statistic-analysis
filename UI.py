@@ -50,7 +50,7 @@ def filter_data(data: pd.DataFrame) -> pd.DataFrame:
 def display_data_for_accident_type(filtered_data: pd.DataFrame, selected_year: int, accident_type: str) -> None:
     """Displays data filtered by accident type."""
     if st.button(f"Show Data for Accident Type in {selected_year}"):
-        filtered_data_type = filtered_data[filtered_data['ACCIDENT_TYPE'].str.contains(accident_type, case=False, na=False)]
+        filtered_data_type = filtered_data[filtered_data['ACCIDENT_TYPE'].str.contains(accident_type, case=False)]
         filtered_data_type['ACCIDENT_DATE'] = filtered_data_type['ACCIDENT_DATE'].dt.date
         selected_columns = ['OBJECTID', 'ACCIDENT_NO', 'ACCIDENT_TYPE', 'ACCIDENT_DATE', 'ACCIDENT_TIME', 'SEVERITY']
         st.dataframe(filtered_data_type[selected_columns])
@@ -94,7 +94,7 @@ def display_alcohol_impacts(filtered_data: pd.DataFrame, selected_year: int) -> 
         sizes = [alcohol_impact_count, non_alcohol_impact_count]
         colors = ['lightcoral', 'lightblue']
         fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors)
         ax.axis('equal')
         plt.title(f'Alcohol Impacts in {selected_year}')
         st.pyplot(fig)
