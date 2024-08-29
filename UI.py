@@ -45,7 +45,7 @@ def filter_data(data: pd.DataFrame) -> pd.DataFrame:
     # Display alcohol impacts
     display_alcohol_impacts(filtered_data, selected_year)
     # Display data per speed zone
-    display_speed_zones(data)
+    display_speed_zones(filtered_data, selected_year)
 
 # Function to display data for a specific accident type
 def display_data_for_accident_type(filtered_data: pd.DataFrame, selected_year: int, accident_type: str) -> None:
@@ -101,7 +101,7 @@ def display_alcohol_impacts(filtered_data: pd.DataFrame, selected_year: int) -> 
         st.pyplot(fig)
 
 # Function to display accident data per speed zone
-def display_speed_zones(data: pd.DataFrame, selected_year: int) -> None:
+def display_speed_zones(filtered_data: pd.DataFrame, selected_year: int) -> None:
     """Displays data on total accidents per speed zone for the selected year."""
     if st.button("Show Data per Speed Zone"):
         # Filter data by the selected year
