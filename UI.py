@@ -17,8 +17,8 @@ def read_csv(csv: str) -> pd.DataFrame:
         data['ACCIDENT_DATE'] = pd.to_datetime(data['ACCIDENT_DATE'], format=date_format, errors='coerce')
         st.write('CSV file uploaded successfully!')
         return data
-    except Exception as e:
-        st.error(f"Error reading CSV file: {e}")
+    except Exception as error_file:
+        st.error(f"Error reading CSV file: {error_file}")
         return pd.DataFrame()
 
 # Function to filter data based on user selections
