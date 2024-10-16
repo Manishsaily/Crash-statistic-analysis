@@ -10,20 +10,20 @@ CSV_FILE = "Crash Statistics Victoria.csv"
 
 # Function to read and process the CSV file
 def read_csv(csv: str) -> pd.DataFrame:
-    """Reads the CSV file and converts the ACCIDENT_DATE to datetime format."""
+    #Reads the CSV file and converts the ACCIDENT_DATE to datetime format
     try:
         data = pd.read_csv(csv)
         date_format = '%d/%m/%Y'
-        data['ACCIDENT_DATE'] = pd.to_datetime(data['ACCIDENT_DATE'], format=date_format, errors='coerce')
+        data['ACCIDENT_DATE'] = pd.to_datetime(data['ACCIDENT_DATE'], format=date_format)
         st.write('CSV file uploaded successfully!')
         return data
-    except Exception as e:
-        st.error(f"Error reading CSV file: {e}")
+    except Exception as error_file:
+        st.error(f"Error reading CSV file: {error_file}")
         return pd.DataFrame()
 
 # Function to filter data based on user selections
 def filter_data(data: pd.DataFrame) -> pd.DataFrame:
-    """Filters the data based on user-selected year and accident type."""
+   #Filters the data based on user-selected year and accident type
     st.title("Crash Statistics Data Filtering")
 
     # Create a dropdown to select the year
@@ -49,19 +49,19 @@ def filter_data(data: pd.DataFrame) -> pd.DataFrame:
 
 # Function to display data for a specific accident type
 def display_data_for_accident_type(filtered_data: pd.DataFrame, selected_year: int, accident_type: str) -> None:
-    """Displays data filtered by accident type."""
+    #Displays data filtered by accident type.
     if st.button(f"Show Data for Accident Type in {selected_year}"):
-        filtered_data_type = filtered_data[filtered_data['ACCIDENT_TYPE'].str.contains(accident_type, case=False, na=False)]
+        filtered_data_type = filtered_data[filtered_data['ACCIDENT_TYPE'].str.contains(accident_type, case=False)]
         filtered_data_type['ACCIDENT_DATE'] = filtered_data_type['ACCIDENT_DATE'].dt.date
         selected_columns = ['OBJECTID', 'ACCIDENT_NO', 'ACCIDENT_TYPE', 'ACCIDENT_DATE', 'ACCIDENT_TIME', 'SEVERITY']
         st.dataframe(filtered_data_type[selected_columns])
 
 # Function to display accidents per hour
 def display_accidents_per_hour(filtered_data: pd.DataFrame, selected_year: int) -> None:
-    """Displays a bar chart of accidents per hour."""
+    #Displays a bar chart of accidents per hour.
     if st.button("Accidents per Hour"):
         time_format = '%H.%M.%S'
-        filtered_data['ACCIDENT_TIME'] = pd.to_datetime(filtered_data['ACCIDENT_TIME'], format=time_format, errors='coerce')
+        filtered_data['ACCIDENT_TIME'] = pd.to_datetime(filtered_data['ACCIDENT_TIME'], format=time_format)
         filtered_data['hour'] = filtered_data['ACCIDENT_TIME'].dt.hour
 
         # Group data by hour and count accidents
@@ -78,7 +78,7 @@ def display_accidents_per_hour(filtered_data: pd.DataFrame, selected_year: int) 
 
 # Function to display the impact of alcohol on accidents
 def display_alcohol_impacts(filtered_data: pd.DataFrame, selected_year: int) -> None:
-    """Displays data and a pie chart for accidents involving alcohol."""
+    #Displays data and a pie chart for accidents involving alcohol.
     if st.button("Alcohol Impacts"):
         alcohol_impact_data = filtered_data[filtered_data['ALCOHOLTIME'].str.lower() == 'yes'].copy()
         alcohol_impact_data['ACCIDENT_DATE'] = alcohol_impact_data['ACCIDENT_DATE'].dt.date
@@ -95,14 +95,14 @@ def display_alcohol_impacts(filtered_data: pd.DataFrame, selected_year: int) -> 
         sizes = [alcohol_impact_count, non_alcohol_impact_count]
         colors = ['lightcoral', 'lightblue']
         fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors)
         ax.axis('equal')
         plt.title(f'Alcohol Impacts in {selected_year}')
         st.pyplot(fig)
 
 # Function to display accident data per speed zone
 def display_speed_zones(filtered_data: pd.DataFrame, selected_year: int) -> None:
-    """Displays data on total accidents per speed zone for the selected year."""
+    #Displays data on total accidents per speed zone for the selected year
     if st.button("Show Data per Speed Zone"):
         # Filter data by the selected year
         filtered_data = data[data['ACCIDENT_DATE'].dt.year == selected_year].copy()
