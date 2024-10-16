@@ -2,9 +2,10 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
+#title of the Streamlit app
 st.title('Accident Analysis App')
 
-# CSV file within the git repo
+# Define the CSV file path within the git repo
 CSV_FILE = "Crash Statistics Victoria.csv"
 
 # Function to read and process the CSV file
